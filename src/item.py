@@ -2,6 +2,7 @@ import csv
 from pathlib import Path
 
 
+
 class Item:
     """
     Класс для представления товара в магазине.
@@ -76,3 +77,7 @@ class Item:
     def string_to_number(value: str) -> float:
         """статический метод, возвращающий число из числа-строки"""
         return int(float(value))
+
+    def __add__(self, other) -> int:
+        if isinstance(other, Item):
+            return self.quantity + other.quantity
