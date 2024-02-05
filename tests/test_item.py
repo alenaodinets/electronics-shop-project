@@ -51,3 +51,4 @@ def test_str(item):
 def test_add(item, phone):
     assert item.quantity + phone.quantity == 10
     assert phone.quantity + phone.quantity == 10
+

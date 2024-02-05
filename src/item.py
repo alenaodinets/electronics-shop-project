@@ -2,7 +2,6 @@ import csv
 from pathlib import Path
 
 
-
 class Item:
     """
     Класс для представления товара в магазине.
