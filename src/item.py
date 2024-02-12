@@ -59,18 +59,26 @@ class Item:
         self.__name = item
 
     @classmethod
-    def instantiate_from_csv(cls, file_path) -> None:
+    def instantiate_from_csv(cls, file_path="items.csv") -> None:
         """класс-метод, инициализирующий экземпляры класса Item данными из файла src/items.csv"""
         cls.all.clear()
         file_path = Path(__file__).parent.joinpath("items.csv")
-        with open(file_path, 'r', newline='', encoding='utf-8-sig') as file:
-            reader = csv.DictReader(file)
-            data = list(reader)
-            for item in data:
-                name = item['name']
-                price = cls.string_to_number(item['price'])
-                quantity = int(item['quantity'])
-                cls(name, price, quantity)
+        try:
+            with open(file_path, 'r', newline='', encoding='utf-8-sig') as file:
+                reader = csv.DictReader(file)
+                data = list(reader)
+                if 'name' not in data or 'price' not in data or 'quantity' not in data:
+                    raise csv.Error('Файл item.csv поврежден')
+                else:
+                    for item in data:
+                        name = item['name']
+                        price = cls.string_to_number(item['price'])
+                        quantity = int(item['quantity'])
+                        cls(name, price, quantity)
+        except FileNotFoundError:
+            raise FileNotFoundError("Отсутствует файл item.csv")
+        except KeyError:
+            raise InstantiateCSVError("Файл item.csv поврежден")
 
     @staticmethod
     def string_to_number(value: str) -> float:

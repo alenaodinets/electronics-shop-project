@@ -2,6 +2,7 @@
 import pytest
 from src.item import Item
 from src.phone import Phone
+import csv
 
 
 @pytest.fixture
@@ -52,3 +53,13 @@ def test_add(item, phone):
     assert item.quantity + phone.quantity == 10
     assert phone.quantity + phone.quantity == 10
 
+
+def test_instantiate_from_csv_file_not_found():
+    with pytest.raises(FileNotFoundError):
+        with open("ite.csv", 'r', newline='', encoding='utf-8-sig') as file:
+            csv.DictReader(file)
+
+
+def test_instantiate_from_csv_corrupted_file():
+    with pytest.raises(csv.Error):
+        Item.instantiate_from_csv()
