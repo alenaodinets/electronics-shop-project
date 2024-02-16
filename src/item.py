@@ -67,14 +67,11 @@ class Item:
             with open(file_path, 'r', newline='', encoding='utf-8-sig') as file:
                 reader = csv.DictReader(file)
                 data = list(reader)
-                if 'name' not in data or 'price' not in data or 'quantity' not in data:
-                    raise csv.Error('Файл item.csv поврежден')
-                else:
-                    for item in data:
-                        name = item['name']
-                        price = cls.string_to_number(item['price'])
-                        quantity = int(item['quantity'])
-                        cls(name, price, quantity)
+                for item in data:
+                    name = item['name']
+                    price = cls.string_to_number(item['price'])
+                    quantity = int(item['quantity'])
+                    cls(name, price, quantity)
         except FileNotFoundError:
             raise FileNotFoundError("Отсутствует файл item.csv")
         except KeyError:
@@ -88,3 +85,12 @@ class Item:
     def __add__(self, other) -> int:
         if isinstance(other, Item):
             return self.quantity + other.quantity
+
+
+class InstantiateCSVError(Exception):
+
+    def __init__(self, *args, **kwargs):
+        self.message = "Файл item.csv поврежден"
+
+    def __str__(self):
+        return self.message
